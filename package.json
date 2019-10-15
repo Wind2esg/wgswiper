@@ -1,0 +1,40 @@
+{
+  "author": "wind2esg",
+  "email": "wind2esg@gmail.com",
+  "license": "MIT",
+  "name": "wgswiper",
+  "version": "1.0.0",
+  "description": "自适应页面 + 翻页锁的 swiper！Self-adaption pages + slide lock Swiper for h5",
+  "main": "dist/index.js",
+  "type": "dist/index.d.ts",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wind2esg/wgswiper.git"
+  },
+  "keywords": [
+    "weixin",
+    "wechat",
+    "h5",
+    "swiper",
+    "self-adaption",
+    "too long",
+    "too short",
+    "swiper autoHeight",
+    "slide",
+    "h5快速开发",
+    "h5滑页",
+    "微信h5",
+    "特效"
+  ],
+  "dependencies": {
+    "@types/swiper": "^4.4.5",
+    "swiper": "^5.0.4"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ]
+}
