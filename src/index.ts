@@ -9,10 +9,10 @@
 
 import Swiper from 'swiper';
 
-
-
 export default class Wgswiper{
-  constructor(){
+  public wgswiper: Swiper;
+  
+  constructor(customInit?:any){
     let swiperWrapperMove: number = 0;
     let swiperWrapperInnerMove: number = 0;
     let slideTouchmoveLastY: number = 0;
@@ -113,6 +113,8 @@ export default class Wgswiper{
           }
           
           addOnloadListener(initFunc);
+
+          customInit && customInit();
         },
         slideChange: ()=>{
           for (let i = 0; i < document.getElementsByTagName('video').length; i++) {
@@ -125,6 +127,12 @@ export default class Wgswiper{
         }
       }
     });
+
+    this.wgswiper = swiper; 
+  }
+
+  getSwiper(): Swiper{
+    return this.wgswiper;
   }
 }
       

@@ -6,6 +6,9 @@
  *
  * ez access to wechat share with wechat js sdk centre service
  */
+import Swiper from 'swiper';
 export default class Wgswiper {
-    constructor();
+    wgswiper: Swiper;
+    constructor(wgswiper: Swiper, init?: any);
+    getSwiper(): Swiper;
 }

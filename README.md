@@ -27,6 +27,8 @@ Ez use.
 + When in those long page, cancel swiper's touchevent and scroll. Add event handler to deal with scroll in the page. declare a lock to protect from sliding when first hit the page edge. Springback will affect if there's next page.
   
 + If used `window.onload`. Do as `addOnloadListener`.
++ `getSwiper()` return swiper object. How to use it? Refer to [official api doc](https://swiperjs.com/api/)
+ 
 
 ## useage
 install  
@@ -45,7 +47,26 @@ Add .swiper-height in .swiper-slide. All your content of that slide is child of 
 
 for commonjs and ts  
 ```
-new Wgswiper();
+new Wgswiper();                    
+
+new Wgswiper(()=>{
+
+    // do whatever you want when the swiper init
+    // this is THE ONLY WAY you can add init handler
+    // for more, https://swiperjs.com/api/#events
+
+}));      
+
+let wgswiper = new Wgswiper().getSwiper();
+
+// add other event handles
+// init NOT allowed here 
+// for more, https://swiperjs.com/api/#events  
+
+wgswiper.on('slideChange',()=>{
+    // do whatever you want
+})
+
 ```
 
 ## link

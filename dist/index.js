@@ -13,7 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const swiper_1 = __importDefault(require("swiper"));
 class Wgswiper {
-    constructor() {
+    constructor(wgswiper, init) {
+        this.wgswiper = wgswiper;
         let swiperWrapperMove = 0;
         let swiperWrapperInnerMove = 0;
         let slideTouchmoveLastY = 0;
@@ -110,6 +111,7 @@ class Wgswiper {
                         }
                     };
                     addOnloadListener(initFunc);
+                    init && init();
                 },
                 slideChange: () => {
                     for (let i = 0; i < document.getElementsByTagName('video').length; i++) {
@@ -122,6 +124,10 @@ class Wgswiper {
                 }
             }
         });
+        this.wgswiper = swiper;
+    }
+    getSwiper() {
+        return this.wgswiper;
     }
 }
 exports.default = Wgswiper;
