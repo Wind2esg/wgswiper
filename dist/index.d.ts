@@ -9,6 +9,6 @@
 import Swiper from 'swiper';
 export default class Wgswiper {
     wgswiper: Swiper;
-    constructor(wgswiper: Swiper, init?: any);
+    constructor(customInit?: any);
     getSwiper(): Swiper;
 }

@@ -3,7 +3,7 @@
   "email": "wind2esg@gmail.com",
   "license": "MIT",
   "name": "wgswiper",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "自适应页面 + 翻页锁的 swiper！Self-adaption pages + slide lock Swiper for h5",
   "main": "dist/index.js",
   "type": "dist/index.d.ts",
