@@ -11,7 +11,7 @@ import Swiper from 'swiper';
 
 export default class Wgswiper{
   public wgswiper: Swiper;
-  
+
   constructor(customInit?:any){
     let swiperWrapperMove: number = 0;
     let swiperWrapperInnerMove: number = 0;
@@ -117,9 +117,6 @@ export default class Wgswiper{
           customInit && customInit();
         },
         slideChange: ()=>{
-          for (let i = 0; i < document.getElementsByTagName('video').length; i++) {
-            document.getElementsByTagName('video')[i].pause();
-          }
           document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${slideLocations[swiper.activeIndex]}px, 0px);transition-duration: 500ms;`);
           swiperWrapperMove = slideLocations[swiper.activeIndex];
           swiperWrapperInnerMove = 0;
