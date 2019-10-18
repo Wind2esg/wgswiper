@@ -25,6 +25,8 @@ Ez use.
 + Init slide's height with .swiper-height's clientheight when page loaded.
 + When onSlide, adjust wrapper css accroding to slide's height to slide.
 + When in those long page, cancel swiper's touchevent and scroll. Add event handler to deal with scroll in the page. declare a lock to protect from sliding when first hit the page edge. Springback will affect if there's next page.
+  
++ If used `window.onload`. Do as `addOnloadListener`.
 
 ## useage
 install  

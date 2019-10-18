@@ -14,6 +14,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const swiper_1 = __importDefault(require("swiper"));
 class Wgswiper {
     constructor() {
+        let swiperWrapperMove = 0;
+        let swiperWrapperInnerMove = 0;
+        let slideTouchmoveLastY = 0;
+        let swiperWrapperInnerEnd = true;
+        let swiperWrapperBack = 0;
+        let slideLocations = [];
         // swiper init
         let swiper = new swiper_1.default('.swiper-container', {
             direction: 'vertical',
@@ -21,55 +27,49 @@ class Wgswiper {
             followFinger: false,
             on: {
                 init: () => {
-                    window.onload = function () {
-                        window.swiperWrapperMove = 0;
-                        window.swiperWrapperInnerMove = 0;
-                        window.slideTouchmoveLastY = 0;
-                        window.swiperWrapperInnerEnd = true;
-                        window.swiperWrapperBack = 0;
-                        window.slideLocations = [];
+                    let initFunc = () => {
                         let slideCursor = 0;
                         let collectionSlideHeight = document.getElementsByClassName('slide-height');
                         let collectionSwiperSlide = document.getElementsByClassName('swiper-slide');
                         for (let index = 0; index < collectionSlideHeight.length; index++) {
                             let swiperSlideHeight = collectionSlideHeight[index].clientHeight < window.innerHeight ? window.innerHeight : collectionSlideHeight[index].clientHeight;
                             collectionSwiperSlide[index].setAttribute('style', `height:${swiperSlideHeight}px`);
-                            window.slideLocations.push(-slideCursor);
+                            slideLocations.push(-slideCursor);
                             slideCursor += swiperSlideHeight;
                         }
                         swiper.slides.on('touchmove', (e) => {
                             if (swiper.slides[swiper.activeIndex].clientHeight > window.innerHeight) {
                                 let swiperDiff = 0;
-                                swiperDiff = e.targetTouches[0].pageY - (window.slideTouchmoveLastY === 0 ? swiper.touches.startY : window.slideTouchmoveLastY);
-                                window.slideTouchmoveLastY = e.targetTouches[0].pageY;
-                                let slidePrev = window.swiperWrapperInnerEnd && (window.swiperWrapperInnerMove === 0 && swiperDiff > 0);
-                                let slideNext = window.swiperWrapperInnerEnd && (window.swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight) && swiperDiff < 0);
+                                swiperDiff = e.targetTouches[0].pageY - (slideTouchmoveLastY === 0 ? swiper.touches.startY : slideTouchmoveLastY);
+                                slideTouchmoveLastY = e.targetTouches[0].pageY;
+                                let slidePrev = swiperWrapperInnerEnd && (swiperWrapperInnerMove === 0 && swiperDiff > 0);
+                                let slideNext = swiperWrapperInnerEnd && (swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight) && swiperDiff < 0);
                                 if (!slidePrev && !slideNext) {
-                                    if (window.swiperWrapperInnerMove === 0 && (swiperDiff > 0)) {
+                                    if (swiperWrapperInnerMove === 0 && (swiperDiff > 0)) {
                                         if (swiper.slides[swiper.activeIndex] !== 0) {
-                                            window.swiperWrapperBack = 1;
-                                            window.swiperWrapperMove += 2;
+                                            swiperWrapperBack = 1;
+                                            swiperWrapperMove += 2;
                                         }
                                     }
-                                    else if ((window.swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)) && (swiperDiff < 0)) {
+                                    else if ((swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)) && (swiperDiff < 0)) {
                                         if (swiper.slides[swiper.activeIndex] !== swiper.slides.length - 1) {
-                                            window.swiperWrapperBack = -1;
-                                            window.swiperWrapperMove -= 2;
+                                            swiperWrapperBack = -1;
+                                            swiperWrapperMove -= 2;
                                         }
                                     }
-                                    else if (window.swiperWrapperInnerMove >= 0 && (window.swiperWrapperInnerMove <= (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight))) {
-                                        window.swiperWrapperInnerMove -= swiperDiff;
-                                        window.swiperWrapperMove += swiperDiff;
+                                    else if (swiperWrapperInnerMove >= 0 && (swiperWrapperInnerMove <= (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight))) {
+                                        swiperWrapperInnerMove -= swiperDiff;
+                                        swiperWrapperMove += swiperDiff;
                                     }
-                                    if (window.swiperWrapperInnerMove < 0) {
-                                        window.swiperWrapperMove += window.swiperWrapperInnerMove;
-                                        window.swiperWrapperInnerMove = 0;
+                                    if (swiperWrapperInnerMove < 0) {
+                                        swiperWrapperMove += swiperWrapperInnerMove;
+                                        swiperWrapperInnerMove = 0;
                                     }
-                                    else if (window.swiperWrapperInnerMove > (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)) {
-                                        window.swiperWrapperMove += window.swiperWrapperInnerMove - (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight);
-                                        window.swiperWrapperInnerMove = swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight;
+                                    else if (swiperWrapperInnerMove > (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)) {
+                                        swiperWrapperMove += swiperWrapperInnerMove - (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight);
+                                        swiperWrapperInnerMove = swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight;
                                     }
-                                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${window.swiperWrapperMove}px, 0px);`);
+                                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);`);
                                     e.preventDefault();
                                     e.stopPropagation();
                                     e.stopImmediatePropagation();
@@ -78,34 +78,47 @@ class Wgswiper {
                         });
                         swiper.slides.on('touchend', (e) => {
                             if (swiper.slides[swiper.activeIndex].clientHeight > window.innerHeight) {
-                                if (window.swiperWrapperInnerMove === 0 || window.swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)) {
-                                    window.swiperWrapperInnerEnd = true;
+                                if (swiperWrapperInnerMove === 0 || swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)) {
+                                    swiperWrapperInnerEnd = true;
                                 }
                                 else {
-                                    window.swiperWrapperInnerEnd = false;
+                                    swiperWrapperInnerEnd = false;
                                 }
-                                window.slideTouchmoveLastY = 0;
-                                if (window.swiperWrapperBack === -1) {
-                                    window.swiperWrapperMove = window.slideLocations[swiper.activeIndex + 1] + window.innerHeight;
-                                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${window.swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
+                                slideTouchmoveLastY = 0;
+                                if (swiperWrapperBack === -1) {
+                                    swiperWrapperMove = slideLocations[swiper.activeIndex + 1] + window.innerHeight;
+                                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
                                 }
-                                else if (window.swiperWrapperBack === 1) {
-                                    window.swiperWrapperMove = window.slideLocations[swiper.activeIndex];
-                                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${window.swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
+                                else if (swiperWrapperBack === 1) {
+                                    swiperWrapperMove = slideLocations[swiper.activeIndex];
+                                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
                                 }
-                                window.swiperWrapperBack = 0;
+                                swiperWrapperBack = 0;
                             }
                         });
                     };
+                    let addOnloadListener = (func) => {
+                        if (typeof window.onload === 'function') {
+                            let onload = window.onload;
+                            window.onload = () => {
+                                onload();
+                                func();
+                            };
+                        }
+                        else {
+                            window.onload = func;
+                        }
+                    };
+                    addOnloadListener(initFunc);
                 },
                 slideChange: () => {
-                    for (let videoDom of document.getElementsByTagName('video')) {
-                        videoDom.pause();
+                    for (let i = 0; i < document.getElementsByTagName('video').length; i++) {
+                        document.getElementsByTagName('video')[i].pause();
                     }
-                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${window.slideLocations[swiper.activeIndex]}px, 0px);transition-duration: 500ms;`);
-                    window.swiperWrapperMove = window.slideLocations[swiper.activeIndex];
-                    window.swiperWrapperInnerMove = 0;
-                    window.slideTouchmoveLastY = 0;
+                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${slideLocations[swiper.activeIndex]}px, 0px);transition-duration: 500ms;`);
+                    swiperWrapperMove = slideLocations[swiper.activeIndex];
+                    swiperWrapperInnerMove = 0;
+                    slideTouchmoveLastY = 0;
                 }
             }
         });

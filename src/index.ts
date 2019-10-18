@@ -9,8 +9,17 @@
 
 import Swiper from 'swiper';
 
+
+
 export default class Wgswiper{
   constructor(){
+    let swiperWrapperMove: number = 0;
+    let swiperWrapperInnerMove: number = 0;
+    let slideTouchmoveLastY: number = 0;
+    let swiperWrapperInnerEnd: boolean = true;
+    let swiperWrapperBack: number = 0;
+    let slideLocations: Array<number> = [];
+    
     // swiper init
     let swiper = new Swiper('.swiper-container',{
       direction: 'vertical',
@@ -18,13 +27,7 @@ export default class Wgswiper{
       followFinger: false,
       on: {
         init:()=>{
-          window.onload = function(){
-            (window as any).swiperWrapperMove = 0;
-            (window as any).swiperWrapperInnerMove = 0;
-            (window as any).slideTouchmoveLastY = 0;
-            (window as any).swiperWrapperInnerEnd = true;
-            (window as any).swiperWrapperBack = 0;
-            (window as any).slideLocations = []; 
+          let initFunc = ()=>{
             let slideCursor: number = 0;
 
             let collectionSlideHeight: HTMLCollectionOf<Element> = document.getElementsByClassName('slide-height');
@@ -34,41 +37,41 @@ export default class Wgswiper{
               let swiperSlideHeight: number = collectionSlideHeight[index].clientHeight < window.innerHeight ? window.innerHeight : collectionSlideHeight[index].clientHeight;
               collectionSwiperSlide[index].setAttribute('style', `height:${swiperSlideHeight}px`);
               
-              (window as any).slideLocations.push(-slideCursor);
+              slideLocations.push(-slideCursor);
               slideCursor += swiperSlideHeight;
             }
 
             (swiper.slides as any).on('touchmove', (e: TouchEvent)=>{
                 if(swiper.slides[swiper.activeIndex].clientHeight > window.innerHeight){
                   let swiperDiff: number = 0;
-                  swiperDiff = e.targetTouches[0].pageY - ((window as any).slideTouchmoveLastY === 0 ? swiper.touches.startY : (window as any).slideTouchmoveLastY);
-                  (window as any).slideTouchmoveLastY = e.targetTouches[0].pageY;
+                  swiperDiff = e.targetTouches[0].pageY - (slideTouchmoveLastY === 0 ? swiper.touches.startY : slideTouchmoveLastY);
+                  slideTouchmoveLastY = e.targetTouches[0].pageY;
 
-                  let slidePrev: boolean = (window as any).swiperWrapperInnerEnd && ((window as any).swiperWrapperInnerMove === 0 && swiperDiff > 0);
-                  let slideNext: boolean = (window as any).swiperWrapperInnerEnd && ((window as any).swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight) && swiperDiff < 0);
+                  let slidePrev: boolean = swiperWrapperInnerEnd && (swiperWrapperInnerMove === 0 && swiperDiff > 0);
+                  let slideNext: boolean = swiperWrapperInnerEnd && (swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight) && swiperDiff < 0);
 
                   if(!slidePrev && !slideNext){
-                    if((window as any).swiperWrapperInnerMove === 0 && (swiperDiff > 0)){
+                    if(swiperWrapperInnerMove === 0 && (swiperDiff > 0)){
                       if(swiper.slides[swiper.activeIndex] !== 0){
-                        (window as any).swiperWrapperBack = 1;
-                        (window as any).swiperWrapperMove += 2;
+                        swiperWrapperBack = 1;
+                        swiperWrapperMove += 2;
                       }
-                    }else if(((window as any).swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)) && (swiperDiff < 0)){
+                    }else if((swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)) && (swiperDiff < 0)){
                       if(swiper.slides[swiper.activeIndex] !== swiper.slides.length - 1){
-                        (window as any).swiperWrapperBack = -1;
-                        (window as any).swiperWrapperMove -= 2;
+                        swiperWrapperBack = -1;
+                        swiperWrapperMove -= 2;
                       }
-                    }else if((window as any).swiperWrapperInnerMove >= 0 && ((window as any).swiperWrapperInnerMove <= (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight))){
-                      (window as any).swiperWrapperInnerMove -= swiperDiff;
-                      (window as any).swiperWrapperMove += swiperDiff;
-                    }if((window as any).swiperWrapperInnerMove < 0){
-                      (window as any).swiperWrapperMove += (window as any).swiperWrapperInnerMove;
-                      (window as any).swiperWrapperInnerMove = 0;                          
-                    }else if((window as any).swiperWrapperInnerMove > (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)){
-                      (window as any).swiperWrapperMove += (window as any).swiperWrapperInnerMove - (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight);
-                      (window as any).swiperWrapperInnerMove = swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight;
+                    }else if(swiperWrapperInnerMove >= 0 && (swiperWrapperInnerMove <= (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight))){
+                      swiperWrapperInnerMove -= swiperDiff;
+                      swiperWrapperMove += swiperDiff;
+                    }if(swiperWrapperInnerMove < 0){
+                      swiperWrapperMove += swiperWrapperInnerMove;
+                      swiperWrapperInnerMove = 0;                          
+                    }else if(swiperWrapperInnerMove > (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)){
+                      swiperWrapperMove += swiperWrapperInnerMove - (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight);
+                      swiperWrapperInnerMove = swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight;
                     }    
-                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${(window as any).swiperWrapperMove}px, 0px);`);
+                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);`);
 
                     e.preventDefault();
                     e.stopPropagation();
@@ -79,32 +82,46 @@ export default class Wgswiper{
 
             (swiper.slides as any).on('touchend', (e: Event)=>{
               if(swiper.slides[swiper.activeIndex].clientHeight > window.innerHeight){
-                if((window as any).swiperWrapperInnerMove === 0 || (window as any).swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)){
-                  (window as any).swiperWrapperInnerEnd = true;
+                if(swiperWrapperInnerMove === 0 || swiperWrapperInnerMove === (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight)){
+                  swiperWrapperInnerEnd = true;
                 }else{
-                  (window as any).swiperWrapperInnerEnd = false;
+                  swiperWrapperInnerEnd = false;
                 }                    
-                (window as any).slideTouchmoveLastY = 0;
-                if((window as any).swiperWrapperBack === -1){
-                  (window as any).swiperWrapperMove = (window as any).slideLocations[swiper.activeIndex + 1] + window.innerHeight;
-                  document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${(window as any).swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
-                }else if((window as any).swiperWrapperBack === 1){
-                  (window as any).swiperWrapperMove = (window as any).slideLocations[swiper.activeIndex];
-                  document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${(window as any).swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
+                slideTouchmoveLastY = 0;
+                if(swiperWrapperBack === -1){
+                  swiperWrapperMove = slideLocations[swiper.activeIndex + 1] + window.innerHeight;
+                  document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
+                }else if(swiperWrapperBack === 1){
+                  swiperWrapperMove = slideLocations[swiper.activeIndex];
+                  document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
                 }
-                (window as any).swiperWrapperBack = 0;
+                swiperWrapperBack = 0;
               }
             });
           }
+
+          let addOnloadListener = (func: any)=>{
+            if(typeof window.onload === 'function'){
+              let onload: any = window.onload;
+              window.onload = ()=>{
+                onload();
+                func();
+              }
+            }else{
+              window.onload = func;
+            }
+          }
+          
+          addOnloadListener(initFunc);
         },
         slideChange: ()=>{
-          for (let videoDom of document.getElementsByTagName('video') as any){
-            videoDom.pause();
+          for (let i = 0; i < document.getElementsByTagName('video').length; i++) {
+            document.getElementsByTagName('video')[i].pause();
           }
-          document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${(window as any).slideLocations[swiper.activeIndex]}px, 0px);transition-duration: 500ms;`);
-          (window as any).swiperWrapperMove = (window as any).slideLocations[swiper.activeIndex];
-          (window as any).swiperWrapperInnerMove = 0;
-          (window as any).slideTouchmoveLastY = 0;
+          document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${slideLocations[swiper.activeIndex]}px, 0px);transition-duration: 500ms;`);
+          swiperWrapperMove = slideLocations[swiper.activeIndex];
+          swiperWrapperInnerMove = 0;
+          slideTouchmoveLastY = 0;
         }
       }
     });
