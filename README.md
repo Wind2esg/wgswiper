@@ -20,12 +20,16 @@ Ez use.
 
 > So far, only vertical mode and have no other options.
 
+## v2 COMES
+**NOW** nested swiper can be used in wgswiper!
+> If the nested swiper's `direction` is `'vertical'` too, set its `nested` to `true`.
+
 ## tips
 + Set followFinger false and set virtualTranslate true to cancel swiper's translate and touchevent.
 + Init slide's height with .swiper-height's clientheight when page loaded.
 + When onSlide, adjust wrapper css accroding to slide's height to slide.
 + When in those long page, cancel swiper's touchevent and scroll. Add event handler to deal with scroll in the page. declare a lock to protect from sliding when first hit the page edge. Springback will affect if there's next page.
-+ If used `window.onload`. Do as `addOnloadListener`.
++ If used `window.onload`. Do as `addOnloadListener()`.
 + `getSwiper()` return swiper object. How to use it? Refer to [official api doc](https://swiperjs.com/api/)
  
 
@@ -33,18 +37,18 @@ Ez use.
 install  
 `npm i -S wgswiper`  
 
-html  
-Add .swiper-height in .swiper-slide. All your content of that slide is child of .slide-height
 ```
-<div class="swiper-slide">
-    <div class="slide-height">
-        //content
+<div class="wgswiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <div class="wgswiper-slide-height">
+                //content
+            </div>
+        </div>
     </div>
 </div>
-
 ```
 
-for commonjs and ts  
 ```
 new Wgswiper();                    
 
@@ -65,7 +69,6 @@ let wgswiper = new Wgswiper().getSwiper();
 wgswiper.on('slideChange',()=>{
     // do whatever you want
 })
-
 ```
 
 ## link

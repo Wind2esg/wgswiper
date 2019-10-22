@@ -20,8 +20,21 @@ export default class Wgswiper{
     let swiperWrapperBack: number = 0;
     let slideLocations: Array<number> = [];
     
+    let WrapperDOM: any;
+    for(let child of document.getElementsByClassName('wgswiper-container')[0].children as any){
+      for(let className of child.classList as any){
+        if(className === 'swiper-wrapper'){
+          WrapperDOM = child;
+          break;
+        }
+      }
+    }
+
+    let collectionSlideHeight: HTMLCollectionOf<Element> = document.getElementsByClassName('wgswiper-slide-height');
+    let collectionSwiperSlide: HTMLCollectionOf<Element> = WrapperDOM.children;
+
     // swiper init
-    let swiper = new Swiper('.swiper-container',{
+    let swiper = new Swiper('.wgswiper-container',{
       direction: 'vertical',
       virtualTranslate: true,
       followFinger: false,
@@ -29,9 +42,6 @@ export default class Wgswiper{
         init:()=>{
           let initFunc = ()=>{
             let slideCursor: number = 0;
-
-            let collectionSlideHeight: HTMLCollectionOf<Element> = document.getElementsByClassName('slide-height');
-            let collectionSwiperSlide: HTMLCollectionOf<Element> = document.getElementsByClassName('swiper-slide');
             
             for(let index = 0; index < collectionSlideHeight.length; index++){
               let swiperSlideHeight: number = collectionSlideHeight[index].clientHeight < window.innerHeight ? window.innerHeight : collectionSlideHeight[index].clientHeight;
@@ -71,7 +81,7 @@ export default class Wgswiper{
                       swiperWrapperMove += swiperWrapperInnerMove - (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight);
                       swiperWrapperInnerMove = swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight;
                     }    
-                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);`);
+                    WrapperDOM.setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);`);
 
                     e.preventDefault();
                     e.stopPropagation();
@@ -90,10 +100,10 @@ export default class Wgswiper{
                 slideTouchmoveLastY = 0;
                 if(swiperWrapperBack === -1){
                   swiperWrapperMove = slideLocations[swiper.activeIndex + 1] + window.innerHeight;
-                  document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
+                  WrapperDOM.setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
                 }else if(swiperWrapperBack === 1){
                   swiperWrapperMove = slideLocations[swiper.activeIndex];
-                  document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
+                  WrapperDOM.setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
                 }
                 swiperWrapperBack = 0;
               }
@@ -117,7 +127,7 @@ export default class Wgswiper{
           customInit && customInit();
         },
         slideChange: ()=>{
-          document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${slideLocations[swiper.activeIndex]}px, 0px);transition-duration: 500ms;`);
+          WrapperDOM.setAttribute('style', `transform: translate3d(0px, ${slideLocations[swiper.activeIndex]}px, 0px);transition-duration: 500ms;`);
           swiperWrapperMove = slideLocations[swiper.activeIndex];
           swiperWrapperInnerMove = 0;
           slideTouchmoveLastY = 0;
@@ -132,4 +142,3 @@ export default class Wgswiper{
     return this.wgswiper;
   }
 }
-      
