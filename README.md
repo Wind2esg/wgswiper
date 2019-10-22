@@ -34,10 +34,10 @@ install
 `npm i -S wgswiper`  
 
 html  
-Add .swiper-height in .swiper-slide. All your content of that slide is child of .swiper-height
+Add .swiper-height in .swiper-slide. All your content of that slide is child of .slide-height
 ```
 <div class="swiper-slide">
-    <div class="swiper-height">
+    <div class="slide-height">
         //content
     </div>
 </div>
