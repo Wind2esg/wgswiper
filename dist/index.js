@@ -20,8 +20,19 @@ class Wgswiper {
         let swiperWrapperInnerEnd = true;
         let swiperWrapperBack = 0;
         let slideLocations = [];
+        let WrapperDOM;
+        for (let child of document.getElementsByClassName('wgswiper-container')[0].children) {
+            for (let className of child.classList) {
+                if (className === 'swiper-wrapper') {
+                    WrapperDOM = child;
+                    break;
+                }
+            }
+        }
+        let collectionSlideHeight = document.getElementsByClassName('wgswiper-slide-height');
+        let collectionSwiperSlide = WrapperDOM.children;
         // swiper init
-        let swiper = new swiper_1.default('.swiper-container', {
+        let swiper = new swiper_1.default('.wgswiper-container', {
             direction: 'vertical',
             virtualTranslate: true,
             followFinger: false,
@@ -29,8 +40,6 @@ class Wgswiper {
                 init: () => {
                     let initFunc = () => {
                         let slideCursor = 0;
-                        let collectionSlideHeight = document.getElementsByClassName('slide-height');
-                        let collectionSwiperSlide = document.getElementsByClassName('swiper-slide');
                         for (let index = 0; index < collectionSlideHeight.length; index++) {
                             let swiperSlideHeight = collectionSlideHeight[index].clientHeight < window.innerHeight ? window.innerHeight : collectionSlideHeight[index].clientHeight;
                             collectionSwiperSlide[index].setAttribute('style', `height:${swiperSlideHeight}px`);
@@ -69,7 +78,7 @@ class Wgswiper {
                                         swiperWrapperMove += swiperWrapperInnerMove - (swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight);
                                         swiperWrapperInnerMove = swiper.slides[swiper.activeIndex].clientHeight - window.innerHeight;
                                     }
-                                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);`);
+                                    WrapperDOM.setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);`);
                                     e.preventDefault();
                                     e.stopPropagation();
                                     e.stopImmediatePropagation();
@@ -87,11 +96,11 @@ class Wgswiper {
                                 slideTouchmoveLastY = 0;
                                 if (swiperWrapperBack === -1) {
                                     swiperWrapperMove = slideLocations[swiper.activeIndex + 1] + window.innerHeight;
-                                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
+                                    WrapperDOM.setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
                                 }
                                 else if (swiperWrapperBack === 1) {
                                     swiperWrapperMove = slideLocations[swiper.activeIndex];
-                                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
+                                    WrapperDOM.setAttribute('style', `transform: translate3d(0px, ${swiperWrapperMove}px, 0px);transition-duration: 100ms;`);
                                 }
                                 swiperWrapperBack = 0;
                             }
@@ -113,10 +122,7 @@ class Wgswiper {
                     customInit && customInit();
                 },
                 slideChange: () => {
-                    for (let i = 0; i < document.getElementsByTagName('video').length; i++) {
-                        document.getElementsByTagName('video')[i].pause();
-                    }
-                    document.getElementsByClassName('swiper-wrapper')[0].setAttribute('style', `transform: translate3d(0px, ${slideLocations[swiper.activeIndex]}px, 0px);transition-duration: 500ms;`);
+                    WrapperDOM.setAttribute('style', `transform: translate3d(0px, ${slideLocations[swiper.activeIndex]}px, 0px);transition-duration: 500ms;`);
                     swiperWrapperMove = slideLocations[swiper.activeIndex];
                     swiperWrapperInnerMove = 0;
                     slideTouchmoveLastY = 0;
