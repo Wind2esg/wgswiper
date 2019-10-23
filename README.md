@@ -25,6 +25,7 @@ Ez use.
 > If the nested swiper's `direction` is `'vertical'` too, set its `nested` to `true`.
 
 ## tips
++ Swiper's css is NOT necessary. But you may need`body { width: 100%; height: 100%; overflow: hidden;}
 + Set followFinger false and set virtualTranslate true to cancel swiper's translate and touchevent.
 + Init slide's height with .swiper-height's clientheight when page loaded.
 + When onSlide, adjust wrapper css accroding to slide's height to slide.
