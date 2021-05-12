@@ -29,7 +29,7 @@
   ],
   "dependencies": {
     "@types/swiper": "^4.4.5",
-    "swiper": "^5.0.4"
+    "swiper": "^6.5.1"
   },
   "files": [
     "dist",
